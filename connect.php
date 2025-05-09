@@ -1,32 +1,23 @@
 <?php
+$servername = 'instagramapp.mysql.database.azure.com';
+$username   = 'adminapp';
+$password   = 'Adminapp@';
+$dbname     = 'insta_db';
 
-	$servername = 'instagramapp.mysql.database.azure.com';
-	$user 		= 'adminapp';
-	$pass 		= 'Adminapp@';
-	$db 		= 'insta_db';
-	$conn 		= mysqli_connect($servername, $user, $pass, $db);
+// Full path to your CA certificate on the server
+$ssl_ca = __DIR__ . '/ssl/DigiCertGlobalRootCA.crt.pem';
 
+// Init mysqli
+$conn = mysqli_init();
 
-	$ssl_ca = _DIR_ . '/ssl/DigiCertGlobalRootCA.crt.pem';
+// Optional: Verify the server's certificate
+mysqli_options($conn, MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
 
-	// Establish connection
-	$conn = mysqli_init();
-	mysqli_options($conn, MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
-	mysqli_ssl_set(
-		$conn,
-		NULL,  // No client key
-		NULL,  // No client certificate
-		$ssl_ca,
-		NULL,  // No CA path
-		NULL   // No cipher
-	);
+// Set SSL certificate options (CA only, no client cert or key)
+mysqli_ssl_set($conn, NULL, NULL, $ssl_ca, NULL, NULL);
 
-	if (!mysqli_real_connect($conn, $hostname, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL)) {
-		die("Connection failed: " . mysqli_connect_error());
-	}
-	
-	// if(!$conn){
-	// 	die("").'<br>';
-	// }
+// Establish secure connection
+if (!mysqli_real_connect($conn, $servername, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL)) {
+    die("Secure connection failed: " . mysqli_connect_error());
+}
 ?>
-
