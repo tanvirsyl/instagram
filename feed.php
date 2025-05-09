@@ -115,38 +115,7 @@
                     </div>
                 </header>
                 <div class="photo__file-container">
-                    <?php
-                        // Get the file extension
-                        $extension = pathinfo($photo, PATHINFO_EXTENSION);
-                        
-                        // Check if the post is a video
-                        if (in_array($extension, ['mp4', 'avi', 'mov', 'webm', 'ogg'])) {
-                            // Determine the MIME type
-                            $mime_type = '';
-                            if ($extension == 'mp4') {
-                                $mime_type = 'video/mp4';
-                            } elseif ($extension == 'webm') {
-                                $mime_type = 'video/webm';
-                            } elseif ($extension == 'ogg') {
-                                $mime_type = 'video/ogg';
-                            } elseif ($extension == 'avi') {
-                                $mime_type = 'video/x-msvideo';
-                            } elseif ($extension == 'mov') {
-                                $mime_type = 'video/quicktime';
-                            }
-
-                            // Display video with the correct MIME type
-                            echo '<video class="photo__file" controls>
-                                    <source src="' . $photo . '" type="' . $mime_type . '">
-                                    Your browser does not support the video tag.
-                                  </video>';
-                        } else {
-                            // If it's an image, display it
-                            echo '<a href="image-detail.php?post_id=' . $post_id . '&curr_us=' . $us . '"> 
-                                    <img class="photo__file" src="' . $photo . '" />
-                                  </a>';
-                        }
-                    ?>
+                    <a href="image-detail.php?post_id=<?php echo $post_id?>&curr_us=<?php echo $us ?>"> <img class="photo__file" src=<?php echo $photo?> ></a>
                 </div>
                 <div class="photo__info">
                     <div class="photo__icons">
@@ -236,9 +205,9 @@
             <span class="footer__copyright">© 2017 instagram</span>
         </footer>
         <script
-          src="https://code.jquery.com/jquery-3.2.1.min.js"
-          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-          crossorigin="anonymous"></script>
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
         <script src="js/app.js"></script>
     </body>
 </html>

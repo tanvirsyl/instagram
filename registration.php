@@ -22,7 +22,7 @@
             <a href="index.php">
                 <img 
                     src="images"
-                    alt="meetnet"
+                    alt="MeetNet"
                     title="logo"
                     class="navigation__logo"
                 />
