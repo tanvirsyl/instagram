@@ -1,24 +1,37 @@
 <?php
-    include_once 'connect.php';
+include_once 'connect.php';
 
-    $username  = $_POST['username'];
-    $password  = $_POST['password'];
+session_start();
 
-    $result = mysqli_query($conn,  "SELECT 1 AS 'verified'
-                                    FROM users
-                                    WHERE   username = '$username' 
-                                                AND
-                                            password = '$password' ");
+// Check if form is submitted via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = isset($_POST['username']) ? trim($_POST['username']) : null;
+    $password = isset($_POST['password']) ? $_POST['password'] : null;
 
-    $row        = mysqli_fetch_array($result);
-    $verified   = $row['verified'];
+    if ($username && $password) {
+        // Run query to verify user
+        $query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
-    if($verified)
-        header("Location: feed.php?username=$username");
-    else{
-        //echo "Wrong passward or Username!";
-        header("Location: index.php");
+        if (mysqli_num_rows($result) === 1) {
+            $_SESSION['username'] = $username;
+            header("Location: index.php");
+            exit();
+        } else {
+            echo "<p style='color:red;'>Invalid credentials</p>";
+        }
+    } else {
+        echo "<p style='color:red;'>Username and password required</p>";
     }
-        
-    exit();
+}
 ?>
+
+<!-- Basic login form -->
+<form action="login.php" method="POST">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <input type="submit" value="Login" />
+</form>
